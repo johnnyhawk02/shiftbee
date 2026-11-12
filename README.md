@@ -11,7 +11,7 @@ npm run build      # type-check + production build with service worker
 npm run preview    # serve the build (test install / offline here)
 ```
 
-Camera capture and Wake Lock need HTTPS on a phone. For on-device testing use `npm run dev -- --host` behind an HTTPS tunnel, or deploy `dist/` to any static host.
+Camera capture and Wake Lock need HTTPS on a phone. For on-device testing use `npm run dev -- --host` behind an HTTPS tunnel, or use the GitHub Pages deploy (every push to `main` runs `.github/workflows/deploy.yml`).
 
 ## Layout
 
@@ -29,12 +29,12 @@ Camera capture and Wake Lock need HTTPS on a phone. For on-device testing use `n
 2. Edit `src/bee/animations.ts` (open `/?bees` to preview all five states side by side), e.g.
 
 ```ts
-idle: { kind: 'lottie', src: '/bee/idle.json', loop: true },
+idle: { kind: 'lottie', src: `${BASE}bee/idle.json`, loop: true },
 step_complete: { kind: 'video', loop: false, sources: [
-  { src: '/bee/step_complete.webm', type: 'video/webm' },               // Chrome/Android (VP9 alpha)
-  { src: '/bee/step_complete.mov', type: 'video/mp4; codecs="hvc1"' },  // Safari/iOS (HEVC alpha)
+  { src: `${BASE}bee/step_complete.webm`, type: 'video/webm' },               // Chrome/Android (VP9 alpha)
+  { src: `${BASE}bee/step_complete.mov`, type: 'video/mp4; codecs="hvc1"' },  // Safari/iOS (HEVC alpha)
 ]},
-shift_finished: { kind: 'sprite', src: '/bee/finished.png', frames: 24, fps: 24, frameWidth: 256, frameHeight: 256 },
+shift_finished: { kind: 'sprite', src: `${BASE}bee/finished.png`, frames: 24, fps: 24, frameWidth: 256, frameHeight: 256 },
 ```
 
 Any asset that fails to load falls back to the placeholder. Rive needs `npm i @rive-app/react-canvas` and the stub in `BeeCompanion.tsx` filled in. `step_complete` plays for `BEE_TRANSIENT_MS.step_complete` (1.3s) then returns to the screen's base state.

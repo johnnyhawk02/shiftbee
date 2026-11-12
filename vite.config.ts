@@ -3,7 +3,9 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
+// GitHub Pages serves the app from /<repo>/, so the workflow sets BASE_PATH.
 export default defineConfig({
+  base: process.env.BASE_PATH ?? '/',
   plugins: [
     react(),
     tailwindcss(),
@@ -14,8 +16,6 @@ export default defineConfig({
         name: 'ShiftBee: 10-minute shifts',
         short_name: 'ShiftBee',
         description: 'Tiny 10-minute housekeeping and self-care shifts. Everything stays on your device.',
-        start_url: '/',
-        scope: '/',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#fff8e7',
@@ -30,7 +30,6 @@ export default defineConfig({
         // Precache the app shell plus any bee assets (Lottie JSON, WebM/MP4, sprite sheets, .riv)
         globPatterns: ['**/*.{js,css,html,svg,png,webp,json,webm,mp4,riv,woff2}'],
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
-        navigateFallback: '/index.html',
       },
     }),
   ],
