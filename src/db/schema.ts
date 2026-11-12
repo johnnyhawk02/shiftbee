@@ -1,4 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie'
+import { buildSeedTemplates } from './seed'
 
 export type ShiftCategory = 'home' | 'self_care'
 
@@ -84,6 +85,16 @@ export class ShiftBeeDB extends Dexie {
       sessions: '++id, templateId, status, startedAt, endedAt',
       photos: '++id, sessionId, kind, createdAt',
       settings: 'key',
+    })
+    // v2: add presets introduced after launch to databases that already exist.
+    // (Brand-new databases get every preset from the populate hook instead.)
+    this.version(2).stores({}).upgrade(async (tx) => {
+      const table = tx.table<ShiftTemplate, string>('templates')
+      const count = await table.count()
+      const added = buildSeedTemplates().filter((t) => ['chloes-bedroom'].includes(t.id))
+      for (const [i, t] of added.entries()) {
+        if (!(await table.get(t.id))) await table.add({ ...t, order: count + i })
+      }
     })
   }
 }

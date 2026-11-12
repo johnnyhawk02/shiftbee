@@ -5,10 +5,12 @@ import { BeforePhoto } from './screens/BeforePhoto'
 import { ActiveShift } from './screens/ActiveShift'
 import { AfterReveal } from './screens/AfterReveal'
 import { BeeGallery } from './screens/BeeGallery'
+import { RotaEditor } from './screens/RotaEditor'
 
 export type Stage =
   | { name: 'loading' }
   | { name: 'home' }
+  | { name: 'rota' }
   | { name: 'before'; template: ShiftTemplate }
   | { name: 'active'; sessionId: number }
   | { name: 'after'; sessionId: number; fromHistory?: boolean }
@@ -40,8 +42,11 @@ export default function App() {
         <Home
           onPick={(template) => setStage({ name: 'before', template })}
           onOpenSession={(sessionId) => setStage({ name: 'after', sessionId, fromHistory: true })}
+          onOpenRota={() => setStage({ name: 'rota' })}
         />
       )
+    case 'rota':
+      return <RotaEditor onBack={() => setStage({ name: 'home' })} />
     case 'before':
       return (
         <BeforePhoto

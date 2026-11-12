@@ -6,14 +6,16 @@ import { Toggle } from '../components/Toggle'
 import { ProofWall } from '../components/ProofWall'
 import { TemplateEditor } from '../components/TemplateEditor'
 import { InstallButton } from '../components/InstallButton'
+import { TodayRota } from '../components/TodayRota'
 import { useLowBattery } from '../lib/settings'
 
 interface Props {
   onPick: (t: ShiftTemplate) => void
   onOpenSession: (id: number) => void
+  onOpenRota: () => void
 }
 
-export function Home({ onPick, onOpenSession }: Props) {
+export function Home({ onPick, onOpenSession, onOpenRota }: Props) {
   const [lowBattery, setLowBattery] = useLowBattery()
   const templates = useLiveQuery(() => db.templates.orderBy('order').toArray(), [])
   const [editing, setEditing] = useState<ShiftTemplate | 'new' | null>(null)
@@ -45,9 +47,11 @@ export function Home({ onPick, onOpenSession }: Props) {
         description={lowBattery ? 'Bare-minimum steps only. That counts.' : 'For low-energy days. Just the basics.'}
       />
 
+      <TodayRota templates={templates} lowBattery={lowBattery} onPick={onPick} onOpenRota={onOpenRota} />
+
       <section aria-labelledby="pick-shift">
         <div className="mb-2 flex items-baseline justify-between px-1">
-          <h2 id="pick-shift" className="text-lg font-extrabold">Pick a 10-minute shift</h2>
+          <h2 id="pick-shift" className="text-lg font-extrabold">Or pick any 10-minute shift</h2>
           <button type="button" className="text-sm font-bold text-honey-600" onClick={() => setEditing('new')}>
             + New
           </button>

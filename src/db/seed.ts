@@ -123,6 +123,29 @@ const SEEDS: Seed[] = [
       'Hang the towel up to dry',
     ],
   },
+  {
+    id: 'chloes-bedroom',
+    name: 'Chloe’s Bedroom',
+    subtitle: 'A tidy-up for Chloe’s room',
+    icon: '🧸',
+    category: 'home',
+    suggestPhoto: true,
+    standardSteps: [
+      'Pick up all rubbish into one bag',
+      'Gather dirty clothes into the laundry basket',
+      'Carry cups and plates out of the room',
+      'Put toys and books back where they live',
+      'Hang up or fold clean clothes',
+      'Clear the desk or bedside table',
+      'Straighten the bed and plump the pillow',
+      'Open a window for some fresh air',
+    ],
+    lowBatterySteps: [
+      'Put rubbish in bin only',
+      'Toss clothes into the laundry basket',
+      'Take cups to the kitchen',
+    ],
+  },
 ]
 
 export function buildSeedTemplates(now = Date.now()): ShiftTemplate[] {
