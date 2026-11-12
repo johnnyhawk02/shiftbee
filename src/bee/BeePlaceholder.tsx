@@ -9,9 +9,25 @@ const EYES = [
 const star = (x: number, y: number, s: number) =>
   `M${x} ${y - s} Q${x} ${y} ${x + s} ${y} Q${x} ${y} ${x} ${y + s} Q${x} ${y} ${x - s} ${y} Q${x} ${y} ${x} ${y - s}Z`
 
+/** Scalloped ellipse outline: gives the bee a soft, fuzzy bumblebee silhouette. */
+function fluffy(cx: number, cy: number, rx: number, ry: number, n: number, bump: number) {
+  const pts = Array.from({ length: n }, (_, i) => {
+    const a = (i / n) * Math.PI * 2 - Math.PI / 2
+    return [cx + Math.cos(a) * rx, cy + Math.sin(a) * ry].map((v) => +v.toFixed(2))
+  })
+  let d = `M${pts[0][0]} ${pts[0][1]}`
+  for (let i = 1; i <= n; i++) {
+    const [x, y] = pts[i % n]
+    d += ` A${bump} ${bump} 0 0 1 ${x} ${y}`
+  }
+  return d + 'Z'
+}
+
+const BODY = fluffy(100, 120, 64, 58, 40, 5.5)
+
 /**
  * Temporary SVG/CSS bee used until the Fable 5.2 exports land.
- * Chibi style: round body, bright friendly eyes, small smile.
+ * Chubby, fuzzy bumblebee: scalloped fluffy outline, fuzzy stripes and tail, bright eyes, small smile.
  * Each state gets its own pose and CSS animation (see bee.css).
  */
 export function BeePlaceholder({ state }: { state: BeeState }) {
@@ -21,17 +37,17 @@ export function BeePlaceholder({ state }: { state: BeeState }) {
   return (
     <svg viewBox="0 0 200 200" className={`bee-ph bee-ph--${state}`} role="img" aria-label={`Bee (${state.replace('_', ' ')})`}>
       <defs>
-        <radialGradient id="bee-body" cx="40%" cy="30%" r="80%">
-          <stop offset="0%" stopColor="#fff0a8" />
-          <stop offset="45%" stopColor="#ffd045" />
-          <stop offset="100%" stopColor="#f0a514" />
+        <radialGradient id="bee-body" cx="42%" cy="32%" r="78%">
+          <stop offset="0%" stopColor="#fff2b0" />
+          <stop offset="50%" stopColor="#ffd34d" />
+          <stop offset="100%" stopColor="#f2ad1c" />
         </radialGradient>
         <linearGradient id="bee-wing" x1="0" y1="0" x2="0.3" y2="1">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
           <stop offset="100%" stopColor="#bfe3ff" stopOpacity="0.6" />
         </linearGradient>
         <clipPath id="bee-body-clip">
-          <ellipse cx="100" cy="118" rx="62" ry="56" />
+          <path d={BODY} />
         </clipPath>
       </defs>
 
@@ -60,17 +76,30 @@ export function BeePlaceholder({ state }: { state: BeeState }) {
           </g>
 
           {/* stubby arms */}
-          <ellipse className="bee-arm bee-arm--l" cx="40" cy="132" rx="9" ry="14" fill="#ffc93a" stroke="#3b2a0a" strokeWidth="3" />
-          <ellipse className="bee-arm bee-arm--r" cx="160" cy="132" rx="9" ry="14" fill="#ffc93a" stroke="#3b2a0a" strokeWidth="3" />
+          <ellipse className="bee-arm bee-arm--l" cx="38" cy="132" rx="9" ry="13" fill="#ffc93a" stroke="#3b2a0a" strokeWidth="3" />
+          <ellipse className="bee-arm bee-arm--r" cx="162" cy="132" rx="9" ry="13" fill="#ffc93a" stroke="#3b2a0a" strokeWidth="3" />
 
-          {/* round body */}
-          <ellipse cx="100" cy="118" rx="62" ry="56" fill="url(#bee-body)" stroke="#3b2a0a" strokeWidth="3.5" />
-          <g clipPath="url(#bee-body-clip)" fill="#3b2a0a">
-            <path d="M30 146 Q100 160 170 146 L170 158 Q100 172 30 158 Z" />
-            <path d="M30 168 Q100 182 170 168 L170 190 L30 190 Z" />
+          {/* fluffy round body */}
+          <path d={BODY} fill="url(#bee-body)" />
+          <g clipPath="url(#bee-body-clip)">
+            {/* fuzzy dark band + fluffy white tail, bumblebee style */}
+            <path d="M20 142 Q60 134 100 138 Q140 134 180 142 L180 162 Q140 156 100 160 Q60 156 20 162 Z" fill="#3b2a0a" />
+            <path d="M20 168 Q60 162 100 166 Q140 162 180 168 L180 200 L20 200 Z" fill="#fff6e6" />
+            {/* little fur strokes */}
+            <g stroke="#e8a21a" strokeWidth="2" strokeLinecap="round" opacity="0.55">
+              <path d="M58 90 l-3 -5 M140 92 l3 -5 M48 112 l-5 -2 M152 112 l5 -2 M70 74 l-1 -5 M130 74 l1 -5" />
+            </g>
+            <g stroke="#5a4320" strokeWidth="2" strokeLinecap="round" opacity="0.7">
+              <path d="M40 150 l-2 4 M70 148 l0 5 M100 150 l0 5 M130 148 l0 5 M160 150 l2 4" />
+            </g>
           </g>
-          {/* glossy top highlight */}
-          <ellipse cx="78" cy="78" rx="20" ry="9" fill="#fff" opacity="0.45" transform="rotate(-18 78 78)" />
+          <path d={BODY} fill="none" stroke="#3b2a0a" strokeWidth="3.5" strokeLinejoin="round" />
+
+          {/* fuzzy tuft on top */}
+          <path d="M90 66 q3 -9 8 -2 q4 -9 8 0 q5 -6 6 3" fill="#ffd34d" stroke="#3b2a0a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+
+          {/* soft highlight */}
+          <ellipse cx="76" cy="84" rx="16" ry="7" fill="#fff" opacity="0.4" transform="rotate(-20 76 84)" />
 
           {/* face */}
           <g className="bee-head">
