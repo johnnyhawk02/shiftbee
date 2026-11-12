@@ -1,0 +1,5 @@
+export { BeeCompanion } from './BeeCompanion'
+export { BeeProvider, useBeeState, useBeeScene } from './BeeContext'
+export { BEE_ANIMATIONS } from './animations'
+export { BEE_COPY, pickCopy } from './copy'
+export * from './types'

@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  --color-honey-50: #fff8e7;
+  --color-honey-100: #ffefc2;
+  --color-honey-200: #ffe08a;
+  --color-honey-300: #ffd055;
+  --color-honey-400: #f6b828;
+  --color-honey-500: #e09a12;
+  --color-honey-600: #b8770a;
+  --color-ink: #3b2a0a;
+  --color-ink-soft: #6b5a3a;
+  --color-sky-calm: #8fb8de;
+  --color-night: #2c3550;
+  --font-sans: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--color-honey-50);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+body.low-battery { background: #eef2f8; }
+
+.safe-pad {
+  padding-top: max(env(safe-area-inset-top), 12px);
+  padding-bottom: max(env(safe-area-inset-bottom), 16px);
+  padding-left: max(env(safe-area-inset-left), 16px);
+  padding-right: max(env(safe-area-inset-right), 16px);
+}
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@keyframes card-in { from { opacity: 0; transform: translateY(14px) scale(.98) } to { opacity: 1; transform: none } }
+.card-in { animation: card-in .35s cubic-bezier(.2,.9,.3,1.1) both; }
+
+@keyframes fade-in { from { opacity: 0 } to { opacity: 1 } }
+.fade-in { animation: fade-in .25s ease-out both; }
+
+button { touch-action: manipulation; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card-in, .fade-in { animation: none; }
+}
