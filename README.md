@@ -26,7 +26,7 @@ Camera capture and Wake Lock need HTTPS on a phone. For on-device testing use `n
 ## Swapping in the Fable 5.2 bee
 
 1. Put exports in `public/bee/` (they are precached for offline use).
-2. Edit `src/bee/animations.ts`, e.g.
+2. Edit `src/bee/animations.ts` (open `/?bees` to preview all five states side by side), e.g.
 
 ```ts
 idle: { kind: 'lottie', src: '/bee/idle.json', loop: true },

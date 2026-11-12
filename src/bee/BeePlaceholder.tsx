@@ -1,8 +1,8 @@
 import type { BeeState } from './types'
 
 const EYES = [
-  { cx: 76, cy: 104 },
-  { cx: 124, cy: 104 },
+  { cx: 80, cy: 108 },
+  { cx: 120, cy: 108 },
 ]
 
 /** 4-point twinkle star centred on (x, y). */
@@ -11,12 +11,11 @@ const star = (x: number, y: number, s: number) =>
 
 /**
  * Temporary SVG/CSS bee used until the Fable 5.2 exports land.
- * Chibi style: round body, big glassy eyes, always smiling.
+ * Chibi style: round body, bright friendly eyes, small smile.
  * Each state gets its own pose and CSS animation (see bee.css).
  */
 export function BeePlaceholder({ state }: { state: BeeState }) {
   const sleepy = state === 'low_battery'
-  const sparkly = state === 'step_complete' || state === 'shift_finished'
   const openSmile = state === 'shift_finished' || state === 'step_complete'
 
   return (
@@ -31,11 +30,6 @@ export function BeePlaceholder({ state }: { state: BeeState }) {
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
           <stop offset="100%" stopColor="#bfe3ff" stopOpacity="0.6" />
         </linearGradient>
-        <radialGradient id="bee-eye" cx="50%" cy="68%" r="65%">
-          <stop offset="0%" stopColor="#8a5626" />
-          <stop offset="45%" stopColor="#3a1f0b" />
-          <stop offset="100%" stopColor="#120801" />
-        </radialGradient>
         <clipPath id="bee-body-clip">
           <ellipse cx="100" cy="118" rx="62" ry="56" />
         </clipPath>
@@ -81,41 +75,34 @@ export function BeePlaceholder({ state }: { state: BeeState }) {
           {/* face */}
           <g className="bee-head">
             <g className="bee-eyes">
-              {EYES.map(({ cx, cy }) => (
-                <g key={cx} className="bee-eye">
-                  <ellipse cx={cx} cy={cy} rx="19" ry="22" fill="url(#bee-eye)" stroke="#120801" strokeWidth="1.5" />
-                  {/* lower glassy reflection */}
-                  <path d={`M${cx - 12} ${cy + 10} Q${cx} ${cy + 20} ${cx + 12} ${cy + 10}`} stroke="#d99a4e" strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.55" />
-                  {sparkly ? (
-                    <path d={star(cx + 5, cy - 7, 10)} fill="#fff" />
-                  ) : (
-                    <ellipse cx={cx + 6} cy={cy - 8} rx="7.5" ry="9" fill="#fff" />
-                  )}
-                  <circle cx={cx - 7} cy={cy + 6} r="3.5" fill="#fff" opacity="0.9" />
-                  <circle cx={cx + 9} cy={cy + 8} r="1.8" fill="#fff" opacity="0.7" />
-                  {sleepy && (
-                    <>
-                      <path d={`M${cx - 20.5} ${cy + 1} A20.5 23.5 0 0 1 ${cx + 20.5} ${cy + 1} Z`} fill="#ffcf45" />
-                      <path d={`M${cx - 19} ${cy + 1} Q${cx} ${cy + 7} ${cx + 19} ${cy + 1}`} stroke="#3b2a0a" strokeWidth="3" strokeLinecap="round" fill="none" />
-                      <path d={`M${cx - 11} ${cy + 5} l-3 4 M${cx} ${cy + 6} l0 4.5 M${cx + 11} ${cy + 5} l3 4`} stroke="#3b2a0a" strokeWidth="2" strokeLinecap="round" />
-                    </>
-                  )}
-                </g>
-              ))}
+              {EYES.map(({ cx, cy }) =>
+                sleepy ? (
+                  <path key={cx} d={`M${cx - 9} ${cy} Q${cx} ${cy + 7} ${cx + 9} ${cy}`} stroke="#3b2a0a" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+                ) : state === 'step_complete' ? (
+                  <path key={cx} d={`M${cx - 9} ${cy + 3} Q${cx} ${cy - 7} ${cx + 9} ${cy + 3}`} stroke="#3b2a0a" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+                ) : (
+                  <g key={cx} className="bee-eye">
+                    <ellipse cx={cx} cy={cy} rx="10" ry="12" fill="#3b2a0a" />
+                    {state === 'shift_finished' ? (
+                      <path d={star(cx + 3, cy - 4, 6)} fill="#fff" />
+                    ) : (
+                      <circle cx={cx + 3.5} cy={cy - 4.5} r="4.2" fill="#fff" />
+                    )}
+                    <circle cx={cx - 3.5} cy={cy + 4.5} r="1.8" fill="#fff" />
+                  </g>
+                ),
+              )}
             </g>
 
             {/* blush */}
-            <ellipse cx="54" cy="132" rx="9.5" ry="5.5" fill="#ff8fa3" opacity="0.6" />
-            <ellipse cx="146" cy="132" rx="9.5" ry="5.5" fill="#ff8fa3" opacity="0.6" />
+            <ellipse cx="62" cy="122" rx="9" ry="5.5" fill="#ff9fb0" opacity="0.65" />
+            <ellipse cx="138" cy="122" rx="9" ry="5.5" fill="#ff9fb0" opacity="0.65" />
 
-            {/* smile */}
+            {/* small smile */}
             {openSmile ? (
-              <g>
-                <path d="M89 130 Q100 148 111 130 Q100 134 89 130 Z" fill="#7a2e1a" stroke="#3b2a0a" strokeWidth="2.5" strokeLinejoin="round" />
-                <path d="M94 138 Q100 144 106 138 Q100 135 94 138 Z" fill="#ff8fa3" />
-              </g>
+              <path d="M94 121 Q100 130 106 121 Z" fill="#c2453a" stroke="#3b2a0a" strokeWidth="2.5" strokeLinejoin="round" />
             ) : (
-              <path d={sleepy ? 'M94 133 Q100 137 106 133' : 'M91 131 Q100 141 109 131'} stroke="#3b2a0a" strokeWidth="3.2" strokeLinecap="round" fill="none" />
+              <path d={sleepy ? 'M96 123 Q100 126 104 123' : 'M95 121 Q100 126.5 105 121'} stroke="#3b2a0a" strokeWidth="3" strokeLinecap="round" fill="none" />
             )}
           </g>
 

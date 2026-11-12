@@ -4,6 +4,7 @@ import { Home } from './screens/Home'
 import { BeforePhoto } from './screens/BeforePhoto'
 import { ActiveShift } from './screens/ActiveShift'
 import { AfterReveal } from './screens/AfterReveal'
+import { BeeGallery } from './screens/BeeGallery'
 
 export type Stage =
   | { name: 'loading' }
@@ -28,6 +29,8 @@ export default function App() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [stage.name])
+
+  if (new URLSearchParams(location.search).has('bees')) return <BeeGallery />
 
   switch (stage.name) {
     case 'loading':
