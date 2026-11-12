@@ -5,6 +5,8 @@ import './index.css'
 import App from './App'
 import { BeeProvider } from './bee'
 import { unlockAudio } from './lib/audio'
+// Imported early so it catches the browser's install prompt event before React mounts.
+import './lib/install'
 
 registerSW({ immediate: true })
 
