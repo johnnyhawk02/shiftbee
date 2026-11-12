@@ -5,6 +5,7 @@ import { BeeCompanion, useBeeScene } from '../bee'
 import { Toggle } from '../components/Toggle'
 import { ProofWall } from '../components/ProofWall'
 import { TemplateEditor } from '../components/TemplateEditor'
+import { InstallButton } from '../components/InstallButton'
 import { useLowBattery } from '../lib/settings'
 
 interface Props {
@@ -31,6 +32,8 @@ export function Home({ onPick, onOpenSession }: Props) {
         </h1>
         <span className="rounded-full bg-white/70 px-3 py-1 text-xs font-semibold text-ink-soft">🔒 On this device only</span>
       </header>
+
+      <InstallButton />
 
       <BeeCompanion size={150} />
 
